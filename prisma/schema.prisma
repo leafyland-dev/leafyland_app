@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name      String?
+  email     String   @unique
+  password  String? 
+  phone     String?
+
+  orders    Order[]
+}
+
+model Product {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  name          String    @unique
+
+  description   String
+  category      String?
+  region        String?
+
+  price         Int
+  imagePath        String
+  isAvailable   Boolean     @default(true)
+  orders        Order[]
+}
+
+model Order {
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  pricePaid Int
+
+  userId    String       
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product      @relation(fields: [productId], references: [id], onDelete: Restrict)
+}
+
+model Service{
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  name          String
+  imagePath     String[]
+  description   String
+  category      String?
+  region        String?
+  isAvailable   Boolean   @default(true)
+}
+
+model PlacedOrder {
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  name        String
+  productName String
+  phone       String
+  address     String
+  pinCode     String
+  city        String
+  state       String
+  pricePaid   Int
+  userId      String?
+}
