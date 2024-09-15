@@ -83,4 +83,6 @@ model PlacedOrder {
   state       String
   pricePaid   Int
   userId      String?
+
+  outForDelivery  Boolean   @default(false)
 }

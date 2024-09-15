@@ -5,7 +5,7 @@ const CURRENCY_FORMATTER = new Intl.NumberFormat("en-us",{
 })
 
 export function formatCurrency(amount: number) {
-    return CURRENCY_FORMATTER.format(amount)
+    return CURRENCY_FORMATTER.format(amount/100)
 }
 
 const NUMBER_FORMATTER = new Intl.NumberFormat("en-us")
@@ -16,4 +16,8 @@ export function formatNumber(number:number){
 
 export function descriptionFormatter(desc : string){
     return desc.substring(0, 50)
+}
+
+export function formatPaisatoRupee(number:number){
+    return number/100
 }
