@@ -57,7 +57,7 @@ async function CustomerTable(){
                                             Edit
                                         </Link> */}
                                     </DropdownMenuItem>
-                                    <DeleteDropdownItem id={user.id} />
+                                    {/* <DeleteDropdownItem id={user.id} /> */}
                                     <DropdownMenuSeparator/>
                                     {/* <DeleteDropdownItem id={service.id} disabled= {service._count.orders > 0}/> */}
                                 </DropdownMenuContent>

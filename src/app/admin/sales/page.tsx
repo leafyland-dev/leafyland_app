@@ -3,9 +3,8 @@ import db from '@/db/db'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { CheckCircle2, MoreVertical, XCircle } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
-
-import { ActiveToggleDropdownItem } from './_components/SalesAction'
 import { formatPaisatoRupee } from '@/lib/formatter'
+import { ActiveToggleDropdownItem } from './_components/SalesAction'
 
 function AdminSalesPage() {
   return (<>
