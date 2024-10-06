@@ -12,6 +12,7 @@
 
     const addSchema = z.object({
         name: z.string().min(1),
+        category: z.string().min(1),
         description: z.string().min(1),
         price: z.coerce.number().int().min(1),
         image: imageSchema.refine(file => file.size > 0, "Required")
@@ -33,6 +34,7 @@
         await db.product.create({ data: {
             isAvailable: false,
             name: data.name,
+            category: data.category,
             description: data.description,
             price: data.price,
             imagePath,
@@ -69,6 +71,7 @@
             data: {
             isAvailable: false,
             name: data.name,
+            category: data.category,
             description: data.description,
             price: data.price,
             imagePath,

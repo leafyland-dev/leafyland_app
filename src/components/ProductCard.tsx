@@ -9,6 +9,7 @@ type ProductCardProps = {
     name: string,
     description: string,
     price: number,
+    category: string | null,
     imagePath: string
 }
 

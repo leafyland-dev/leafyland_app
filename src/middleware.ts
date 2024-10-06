@@ -25,3 +25,5 @@ async function isAuthenticated(req: NextRequest){
 export const config = {
     matcher: "/admin/:path*"
 }
+
+export { auth as middlewareAuth } from "@/auth"

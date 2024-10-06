@@ -5,7 +5,7 @@ const CURRENCY_FORMATTER = new Intl.NumberFormat("en-us",{
 })
 
 export function formatCurrency(amount: number) {
-    return CURRENCY_FORMATTER.format(amount/100)
+    return CURRENCY_FORMATTER.format(amount)
 }
 
 const NUMBER_FORMATTER = new Intl.NumberFormat("en-us")

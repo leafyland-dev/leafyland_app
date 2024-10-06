@@ -26,6 +26,11 @@ export function ProductForm({product} : {product? : Product | null}){
             <Input type="text" id="name" name="name" required defaultValue={product?.name || ""}/>
             {error.name && <div className="text-destructive"> {error.name}</div>}
         </div>
+        <div>
+            <Label htmlFor="category">Category</Label>
+            <Input type="text" id="category" name="category"  defaultValue={product?.category || ""}/>
+            {error.category && <div className="text-destructive">{error.category}</div>}
+        </div>
         <div className="space-y-2">
             <Label htmlFor="price">Price</Label>
             <Input 

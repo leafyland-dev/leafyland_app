@@ -1,11 +1,12 @@
-import prisma from '@/db/db'
+
 import { Service } from '@prisma/client'
 import React from 'react'
-import ServiceCard from './ServiceCard'
+import  { ServiceCardRound } from './ServiceCard'
+import db from '@/db/db'
 
 
 async function getServices(){
-    return prisma.service.findMany({
+    return db.service.findMany({
         where: {isAvailable: true}
     })
 }
@@ -27,11 +28,17 @@ type ServiceGridProps = {
 // Component to render the product grid
 function ServiceGrid({ services }: ServiceGridProps) {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <>
+        <div className=' space-y-2 my-10'> 
+        <h2 className='text-2xl lg:text-3xl font-bold'>Our Services</h2>
+        <div className="grid grid-cols-4 md:grid-cols-4 lg:grid-cols-6 place-items-center ">
             {services.map((service) => (
-                <ServiceCard key={service.id} {...service} />
+                <ServiceCardRound key={service.id} {...service} />
             ))}
         </div>
+        </div>
+        
+        </>
     );
 }
 

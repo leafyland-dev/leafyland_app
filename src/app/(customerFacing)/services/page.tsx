@@ -13,11 +13,11 @@ export default function Service() {
             gridTemplateColumns: 'repeat(auto-fill), minmax(200px, 1fr))',
             gap: '20px'
         }}>
+      {/* <h1 className='text-2xl lg:text-4xl font-semibold text-center mb-8 '>Work History</h1> */}
+      <ServiceExample/>
 
       <ServiceGrid />
-      <h1 className='text-2xl lg:text-4xl font-semibold text-center mb-8 '>Work History</h1>
 
-      <ServiceExample/>
         </div>
           <div className="container mx-auto mt-8">
             <h1 className="text-4xl font-semibold text-center mb-8">Contact Us</h1>
@@ -27,5 +27,4 @@ export default function Service() {
         </div>
   );
 };
-
 

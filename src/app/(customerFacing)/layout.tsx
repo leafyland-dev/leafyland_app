@@ -1,8 +1,9 @@
 import { Nav, NavLink } from "@/components/Nav";
-import { auth, signIn, signOut } from "@/auth";
+import { auth, signOut } from "@/auth"; 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SessionProvider } from "next-auth/react";
+// import { getServerSession } from 'next-auth/next' 
 import Search from "@/components/Search"; // Import the Search component
 import { FC } from "react";
 import prisma from "@/db/db";
@@ -23,28 +24,14 @@ function SignOut() {
 
 
 const Layout: FC<{ children: React.ReactNode }> = async ({ children }) => {
-  const session = await auth();
-  // console.log(session.user?.email)
+ 
+  const session = await auth()
   if(session && session.user?.email){
 
-    const user = await prisma.user.findUnique({
-      where: {email: session.user?.email}
-    })
-    if(!user){
-      await prisma.user.create({
-        data: {
-          email: session.user?.email,
-          name: session.user?.name,
-          password: "anything",
-          phone:"9347293"
-        }
-      })
-      console.log("saved in database")
-    }
-  
-
-  return (
-    <SessionProvider>
+    return (
+      <SessionProvider>
+      {/* <> */}
+      
       <Nav>
        
             <NavLink key="home" href="/">Home</NavLink>
@@ -57,9 +44,11 @@ const Layout: FC<{ children: React.ReactNode }> = async ({ children }) => {
        </Nav >
        <div className="container my-8">{children}</div>
         <Footer/>
-	   </SessionProvider>
-	   )
-	   } else{
+      {/* </> */}
+      </SessionProvider>
+       )
+  }
+	   else{
 	   return(
 	   <>
 	   <Nav>
@@ -67,7 +56,7 @@ const Layout: FC<{ children: React.ReactNode }> = async ({ children }) => {
             <NavLink key="products" href="/products">Products</NavLink>
             <NavLink key="services" href="/services">Services</NavLink>
             <Search key="search" />
-            <Link key="signin" href={"/api/auth/signin"}>
+            <Link key="signin" href={"/login"}>
                 <Button>Sign In</Button>
             </Link>
         
@@ -81,3 +70,6 @@ const Layout: FC<{ children: React.ReactNode }> = async ({ children }) => {
 }
 
 export default Layout;
+
+
+
