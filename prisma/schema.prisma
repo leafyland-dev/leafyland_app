@@ -38,7 +38,7 @@ model Product {
   region        String?
 
   price         Int
-  imagePath        String
+  imagePath        String?
   isAvailable   Boolean     @default(true)
   orders        Order[]
 }
