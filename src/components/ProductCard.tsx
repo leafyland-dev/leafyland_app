@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import Link from "next/link"
 import { descriptionFormatter, formatCurrency } from "@/lib/formatter"
 import { Button } from "./ui/button"
+import defaultImage  from "../../public/Logo.png"
 
 type ProductCardProps = {
     id: string,
@@ -18,7 +19,7 @@ export async function ProductCard({id, name, description, price, imagePath}: Pro
     return<>
             <Card className="flex overflow-hidden flex-col text-[#091f0f]">
                 <div className="relative w-full h-auto aspect-video">
-                    <Image src={imagePath} fill alt={name}/>
+                    <Image src={imagePath || defaultImage} fill alt={name}/>
                 </div>
                 <CardHeader>
                     <CardTitle className="text-lg lg:text:2xl">
