@@ -19,7 +19,7 @@ export async function ProductCard({id, name, description, price, imagePath}: Pro
     return<>
             <Card className="flex overflow-hidden flex-col text-[#091f0f]">
                 <div className="relative w-full h-auto aspect-video">
-                    <Image src={imagePath || defaultImage} fill alt={name}/>
+                    <Image src={imagePath } fill alt={name}/>
                 </div>
                 <CardHeader>
                     <CardTitle className="text-lg lg:text:2xl">

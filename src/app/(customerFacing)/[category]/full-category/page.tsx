@@ -2,6 +2,7 @@ import { ProductCard } from '@/components/ProductCard'
 import prisma from '@/db/db'
 import { Product } from '@prisma/client'
 import React from 'react'
+// import defaultImage from '../../../../../public/Logo.png'
 
 async function FullCategory({ params: {category}} : {params: {category: string}}) {
     const productsInCategory = await prisma.product.findMany({
@@ -30,7 +31,7 @@ async function CategoryDetials( {products}: CategoryDetialsProps){
                 ))} */}
                 {products.map(product => (
 
-                    <ProductCard key={product.id} {...product}/>
+                    <ProductCard key={product.id} {...product} />
                 ))
 
                 }
