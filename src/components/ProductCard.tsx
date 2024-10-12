@@ -10,23 +10,16 @@ type ProductCardProps = {
     description: string,
     price: number,
     category: string | null,
-    imagePath: string | null
+    imagePath: string
 }
 
 export async function ProductCard({id, name, description, price, imagePath}: ProductCardProps) {
     
     return<>
             <Card className="flex overflow-hidden flex-col text-[#091f0f]">
-                {/* <div className="relative w-full h-auto aspect-video">
-                    <Image src={imagePath} fill alt={name}/>
-                </div> */}
                 <div className="relative w-full h-auto aspect-video">
-                {imagePath ? (
-                    <Image src={imagePath} fill alt={name} />
-                ) : (
-                    <div className="placeholder-image">Image not available</div> // Fallback content
-                )}
-            </div>
+                    <Image src={imagePath} fill alt={name}/>
+                </div>
                 <CardHeader>
                     <CardTitle className="text-lg lg:text:2xl">
                         {name}

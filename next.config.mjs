@@ -13,7 +13,7 @@ const nextConfig = {
     // ]
     // },
     images: {
-        domains: ['files.edgestore.dev']
+        domains: ['files.edgestore.dev', 'gardengram.in']
     }
 };
 
