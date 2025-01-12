@@ -28,8 +28,8 @@ model User {
 
 model Product {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime?  @default(now())
+  updatedAt     DateTime?  @updatedAt
 
   name          String    @unique
 
