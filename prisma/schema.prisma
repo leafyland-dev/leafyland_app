@@ -61,10 +61,11 @@ model Service{
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 
-  name          String
+  category      String
+  subCategory   String
   imagePath     String[]
   description   String
-  category      String?
+  
   region        String?
   isAvailable   Boolean   @default(true)
 }

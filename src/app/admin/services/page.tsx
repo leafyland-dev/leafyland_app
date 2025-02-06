@@ -31,10 +31,10 @@ async function ServiceTable(){
     const services = await db.service.findMany({
         select: {
             id: true,
-            name: true,
+            category: true,
             isAvailable: true
         },
-        orderBy: { name: "asc"}
+        orderBy: { category: "asc"}
     })
     if(services.length === 0) return <p>No services found</p>
     return(
@@ -68,7 +68,7 @@ async function ServiceTable(){
                                 </>
                             )}
                         </TableCell>
-                        <TableCell>{service.name}</TableCell>
+                        <TableCell>{service.category}</TableCell>
                         {/* <TableCell>{formatCurrency(product.price)}</TableCell>
                         <TableCell>{formatNumber(product._count.orders)}</TableCell> */}
                         <TableCell>

@@ -17,11 +17,66 @@ import { type FileState, MultiImageDropzone } from "@/components/MultiImageDropZ
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
+const serviceNames = [
+  ["Landscape Design & Planning", [
+    "Conceptual landscape design",
+    "Garden architecture & urban planning",
+    "Site analysis & environmental impact assessment",
+    "Sustainable landscape solutions"
+  ]],
+  ["Landscape Construction & Installation", [
+    "Hardscaping (patios, walkways, driveways, retaining walls)",
+    "Softscaping (lawns, plants, trees, shrubs, flower beds)",
+    "Water features (ponds, fountains, waterfalls)",
+    "Irrigation & drainage systems",
+    "Outdoor lighting installation",
+    "Rooftop & vertical gardens"
+  ]],
+  ["Garden & Park Maintenance", [
+    "Lawn care (mowing, fertilization, aeration)",
+    "Pruning & tree care",
+    "Seasonal planting & garden bed maintenance",
+    "Weed & pest control",
+    "Green waste recycling & composting"
+  ]],
+  ["Sustainable & Eco-Friendly Landscaping", [
+    "Native & drought-resistant planting",
+    "Rainwater harvesting systems",
+    "Green roofs & living walls",
+    "Carbon offset landscape projects",
+    "Organic gardening & permaculture design"
+  ]],
+  ["Urban Landscaping & Public Space Development", [
+    "Park & recreational area development",
+    "Smart city greening projects",
+    "Street tree planting & urban forestry",
+    "Community garden projects"
+  ]],
+  ["Commercial & Industrial Landscaping", [
+    "Office & corporate campus landscaping",
+    "Hotel & resort garden design",
+    "Shopping mall & retail space greening",
+    "Industrial estate beautification"
+  ]],
+  ["Specialty Landscaping Services", [
+    "Japanese & Zen gardens",
+    "English & French formal gardens",
+    "Mediterranean & xeriscape gardens",
+    "Historic garden restoration"
+  ]]
+]
+
+
 export function ServiceForm({ service }: { service?: Service | null }) {
+  // const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState(service?.category || "")
+  // const [selectedSubCategory, setSelectedSubCategory] = useState<string>("");
+  const [selectedSubCategory, setSelectedSubCategory] = useState(service?.subCategory || "")
+
   const [fileStates, setFileStates] = useState<FileState[]>([]);
   const { edgestore } = useEdgeStore();
   const [error, action] = useFormState(service == null ? addService : updateService.bind(null, service.id), {});
-  const [name, setName] = useState(service?.name || "");
+  // const [name, setName] = useState(service?.name || "");
   const [description, setDescription] = useState(service?.description || "");
   const [imagePaths, setImagePaths] = useState<string[]>(service?.imagePath ? service.imagePath : []);
 
@@ -45,16 +100,17 @@ export function ServiceForm({ service }: { service?: Service | null }) {
 
   if (isCancelled) {
     return <><div className="flex flex-col items-center m-6">CANCELLED!!!</div>
-    <Link href={"/admin/services"} className="flex felx-col items-center m-6">Click to go back</Link>
+      <Link href={"/admin/services"} className="flex felx-col items-center m-6">Click to go back</Link>
     </>
-    
+
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("name", name);
+    formData.append("category", selectedCategory);
+    formData.append("subCategory", selectedSubCategory);
     formData.append("description", description);
     imagePaths.forEach((url, index) => {
       formData.append(`imagePath[${index}]`, url);
@@ -65,33 +121,69 @@ export function ServiceForm({ service }: { service?: Service | null }) {
     console.log('Submitted form data:', Object.fromEntries(formData.entries()));
   };
 
-  function abortFunc(){
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCategory(e.target.value);
+    setSelectedSubCategory(""); // Reset sub-category selection when category changes
+  };
+
+  const handleSubCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedSubCategory(e.target.value);
+  };
+
+  const subCategories = (serviceNames.find(([category]) => category === selectedCategory)?.[1] ?? []) as string[];
+
+
+  function abortFunc() {
     abortController?.abort();
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="space-y-2">
-        <Label htmlFor="name">Name</Label>
-        <Input 
-          type="text" 
-          id="name" 
-          name="name" 
-          required 
-          value={name}
-          onChange={(e) => setName(e.target.value)} 
-        />
-        {error?.name && <div className="text-destructive"> {error.name}</div>}
+        <Label htmlFor="category">Service Category</Label>
+        <select
+          id="category"
+          name="category"
+          required
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+          className="border p-2 rounded w-full"
+        >
+          <option value="">Select a category</option>
+          {serviceNames.map(([category], index) => (
+            <option key={index} value={category} >{category}</option>
+          ))}
+        </select>
+
+        {/* {error?.name && <div className="text-destructive"> {error.name}</div>} */}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="subCategory">Sub-service</Label>
+        <select
+          id="subCategory"
+          name="subCategory"
+          required
+          value={selectedSubCategory}
+          onChange={handleSubCategoryChange}
+          className="border p-2 rounded w-full"
+          disabled={!selectedCategory}
+        >
+          <option value="">Select a sub-service</option>
+          {subCategories.map((sub, index) => (
+            <option key={index} value={sub}>{sub}</option>
+          ))}
+        </select>
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
-        <Textarea 
-          id="description" 
-          name="description" 
-          required 
+        <Textarea
+          id="description"
+          name="description"
+          required
           value={description}
-          onChange={(e) => setDescription(e.target.value)} 
+          onChange={(e) => setDescription(e.target.value)}
         />
         {error?.description && <div className="text-destructive"> {error.description}</div>}
       </div>
@@ -121,7 +213,7 @@ export function ServiceForm({ service }: { service?: Service | null }) {
                 const res = await edgestore.publicFiles.upload({
                   file: addedFileState.file,
                   options: {
-                    temporary: true,  
+                    temporary: true,
                   },
                   signal: abortController.signal,
                   onProgressChange: async (progress) => {
@@ -168,18 +260,18 @@ export function ServiceForm({ service }: { service?: Service | null }) {
         ) : (
           <p>No images available</p>
         )}
-        
+
       </div>
 
       <Button type="submit">
         Submit
       </Button>
-      <Button className="mx-4" onClick={()=> {
+      <Button className="mx-4" onClick={() => {
         setTimeout(() => {
           setIsCancelled(true)
         }, 100);
         redirect("/admin/services/")
-        }}>Cancel</Button>
+      }}>Cancel</Button>
     </form>
   );
 }

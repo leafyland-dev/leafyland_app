@@ -6,7 +6,8 @@ import { z } from "zod";
 
 // Define schema for validation
 const addSchema = z.object({
-  name: z.string().min(1),
+  category: z.string().min(1),
+  subCategory: z.string().min(1),
   description: z.string().min(1),
   imageUrls: z.array(z.string().url({ message: "Invalid image URL" })).optional(),
 });
@@ -20,7 +21,8 @@ export async function addService(prevState: unknown, formData: FormData) {
 
   // Validate the form data with multiple image URLs
   const result = addSchema.safeParse({
-    name: entries.name,
+    category: entries.category,
+    subCategory: entries.subCategory,
     description: entries.description,
     imageUrls,
   });
@@ -36,7 +38,8 @@ export async function addService(prevState: unknown, formData: FormData) {
   await db.service.create({
     data: {
       isAvailable: false,
-      name: data.name,
+      category: data.category,
+      subCategory: data.subCategory,
       description: data.description,
       imagePath: data.imageUrls || [], // Store all the image URLs
     },
@@ -119,7 +122,8 @@ export async function updateService(
   await db.service.update({
     where: { id },
     data: {
-      name: data.name,
+      category: data.category,
+      subCategory: data.subCategory,
       description: data.description,
       imagePath: data.imageUrls || [], // Store the merged image URLs
     },
