@@ -42,7 +42,7 @@ const Layout: FC<{ children: React.ReactNode }> = async ({ children }) => {
             <div key="signout"><SignOut /></div>
         
        </Nav >
-       <div className="container my-8">{children}</div>
+       <div className=" my-0">{children}</div>
         <Footer/>
       {/* </> */}
       </SessionProvider>
@@ -57,12 +57,12 @@ const Layout: FC<{ children: React.ReactNode }> = async ({ children }) => {
             <NavLink key="services" href="/services">Services</NavLink>
             <Search key="search" />
             <Link key="signin" href={"/login"}>
-                <Button>Sign In</Button>
+                <Button>Login/Signup</Button>
             </Link>
         
       </Nav>
 
-      <div className="container my-8">{children}</div>
+      <div className=" my-0">{children}</div>
       <Footer/>
     </>
   );

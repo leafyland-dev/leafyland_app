@@ -19,7 +19,7 @@ export function ServiceCardRound({id, category, description, imagePath} : Servic
     <>
       <Link href={`/services/${category}/full-category`} className='category-card text-center'>
       
-      <div className="w-16 h-16 relative mx-auto">
+      <div className="w-[100px] h-[100px] relative mx-auto">
               <Image src={imagePath[0]} fill alt={category}  className='w-full h-full object-cover rounded-full'
               />
           

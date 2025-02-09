@@ -26,6 +26,7 @@ async function ProductsTable(){
         select: {
             id: true,
             name: true,
+            category: true,
             price: true,
             isAvailable: true,
             _count: {select: {orders: true}}
@@ -42,6 +43,7 @@ async function ProductsTable(){
                         <span className="sr-only"> Available For Purchase</span>
                     </TableHead>
                     <TableHead>Name</TableHead>
+                    <TableHead>Category</TableHead>
                     <TableHead>Price</TableHead>
                     <TableHead>Order</TableHead>
                     <TableHead className="w-0">
@@ -66,6 +68,7 @@ async function ProductsTable(){
                             )}
                         </TableCell>
                         <TableCell>{product.name}</TableCell>
+                        <TableCell>{product.category}</TableCell>
                         <TableCell>{formatCurrency(product.price)}</TableCell>
                         <TableCell>{formatNumber(product._count.orders)}</TableCell>
                         <TableCell>

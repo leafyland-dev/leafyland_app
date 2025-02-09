@@ -73,7 +73,7 @@ export function Nav({ children }: { children: ReactElement[] }) {
             onChange={handleSearchChange}
             className="p-2 rounded border border-gray-300 focus:outline-none focus:ring focus:border-blue-300 w-full text-gray-500"
           />
-          <button type="submit" className="p-2 bg-secondary text-secondary-foreground rounded hover:bg-secondary-dark focus:outline-none focus:ring">
+          <button type="submit" className="p-2 bg-secondary text-secondary-foreground rounded-[20px] hover:bg-secondary-dark focus:outline-none focus:ring">
             Search
           </button>
         </form>

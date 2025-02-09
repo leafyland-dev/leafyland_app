@@ -28,7 +28,7 @@ const Search: FC = () => {
         placeholder="Search products..."
         value={searchQuery}
         onChange={handleSearchChange}
-        className="p-2 rounded border border-gray-500 focus:outline-none focus:ring focus:border-blue-300 text-gray-500"
+        className="p-2 rounded-[20px] border-[1px] border-green-700 focus:outline-none focus:ring focus:border-blue-300 text-gray-500"
       />
       <button
         type="submit"

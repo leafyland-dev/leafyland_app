@@ -9,6 +9,17 @@ import { Services } from "@/components/ServicesGrid";
 import ServiceExample from "@/components/ServiceExample";
 import serviceImg from '../../../public/serviceBg.jpeg'
 import Image from "next/image";
+import HeroSectionImg1 from "../../../public/LandingHeroSection/Carousel1.png"
+import HeroSectionImg2 from "../../../public/LandingHeroSection/Carousel2.png"
+import HeroSectionImg3 from "../../../public/LandingHeroSection/Carousel3.png"
+
+
+import Autoplay from 'embla-carousel-autoplay'
+
+import AutoCarousel from "@/components/AutoCarousel";
+
+
+const HeroSectionImgs = [HeroSectionImg1, HeroSectionImg2, HeroSectionImg3]
 
 function MostOrdered() {
   return db.product.findMany({
@@ -45,8 +56,14 @@ function ProductByCategory() {
 }
 
 export default async function HomePage() {
+
   return <>
-    <main className="flex-initial">
+  <div className="bg-[#274E2B]">
+
+    <AutoCarousel images = {HeroSectionImgs}/>
+  </div>
+
+    <main className="mx-[20px] lg:mx-[80px] flex-initial">
       {/* <ServiceBar title="Our Services" /> */}
       <ServiceExample />
       <ProductCategory title="Product Category" categoryFetcher={ProductByCategory} />
@@ -66,10 +83,10 @@ async function ProductCategory({ categoryFetcher, title }: ProductCategoryProps)
   const categories = await categoryFetcher();
   return (
     <div className=" space-y-3 my-10">
-      <div className="flex gap-2">
+      <div className="flex gap-2 justify-center pb-[20px]">
         <h2 className="text-2xl lg:text-3xl font-bold">{title}</h2>
       </div>
-      <div className="grid grid-cols-4 md:grid-cols-4 lg:grid-cols-6 gap-2">
+      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
         {categories.map((category, index) => (
           <Link href={`/${category.category}/full-category`} key={index} className="category-card text-center">
             {/* Circular image */}
@@ -91,7 +108,7 @@ async function ProductCategory({ categoryFetcher, title }: ProductCategoryProps)
                   />
                 )}
               </div> */}
-            <div className="w-16 h-16 mx-auto rounded-full overflow-hidden">
+            <div className="w-[100px] h-[100px] mx-auto rounded-full overflow-hidden border-[2px] border-green-500">
               <Image
                 src={category.imagePath ? category.imagePath : serviceImg}
                 alt={category.category ?? 'Category Image'}
