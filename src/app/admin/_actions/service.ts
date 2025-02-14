@@ -16,7 +16,7 @@ export async function addService(prevState: unknown, formData: FormData) {
   // Convert formData to an object and extract multiple image URLs
   const entries = Object.fromEntries(formData.entries());
   const imageUrls = Object.keys(entries)
-    .filter((key) => key.startsWith("imagePath["))
+    .filter((key) => key.startsWith("imageUrls["))
     .map((key) => entries[key] as string);
 
   // Validate the form data with multiple image URLs
@@ -24,7 +24,7 @@ export async function addService(prevState: unknown, formData: FormData) {
     category: entries.category,
     subCategory: entries.subCategory,
     description: entries.description,
-    imageUrls,
+    imageUrls: imageUrls,
   });
 
   if (!result.success) {

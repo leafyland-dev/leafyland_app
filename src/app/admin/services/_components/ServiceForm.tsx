@@ -16,6 +16,8 @@ import { useFormState } from "react-dom";
 import { type FileState, MultiImageDropzone } from "@/components/MultiImageDropZone";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { uploadImageToFirebase } from "@/lib/utils/uploadImage";
+import CloudinaryUploader from "@/components/CloudinaryUploader";
 
 const serviceNames = [
   ["Landscape Design & Planning", [
@@ -68,35 +70,43 @@ const serviceNames = [
 
 
 export function ServiceForm({ service }: { service?: Service | null }) {
-  // const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState(service?.category || "")
-  // const [selectedSubCategory, setSelectedSubCategory] = useState<string>("");
   const [selectedSubCategory, setSelectedSubCategory] = useState(service?.subCategory || "")
 
-  const [fileStates, setFileStates] = useState<FileState[]>([]);
   const { edgestore } = useEdgeStore();
   const [error, action] = useFormState(service == null ? addService : updateService.bind(null, service.id), {});
   // const [name, setName] = useState(service?.name || "");
   const [description, setDescription] = useState(service?.description || "");
-  const [imagePaths, setImagePaths] = useState<string[]>(service?.imagePath ? service.imagePath : []);
 
   const [abortController, setAbortController] = useState<AbortController>();
   const [isCancelled, setIsCancelled] = useState(false);
 
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+
+  // Cloudinary integration
+
+  const handleUploadSuccess = (urls: string[]) => {
+    setImageUrls((prev) => [...prev, ...urls]); // Append new URLs
+    // console.log(imageUrls)
+  };
+  // Log whenever imageUrls updates
+  React.useEffect(() => {
+    console.log("Updated Image URLs:", imageUrls);
+  }, [imageUrls]);
 
 
-  function updateFileProgress(key: string, progress: FileState['progress']) {
-    setFileStates((fileStates) => {
-      const newFileStates = structuredClone(fileStates);
-      const fileState = newFileStates.find(
-        (fileState) => fileState.key === key,
-      );
-      if (fileState) {
-        fileState.progress = progress;
-      }
-      return newFileStates;
-    });
-  }
+  // function updateFileProgress(key: string, progress: FileState['progress']) {
+  //   setFileStates((fileStates) => {
+  //     const newFileStates = structuredClone(fileStates);
+  //     const fileState = newFileStates.find(
+  //       (fileState) => fileState.key === key,
+  //     );
+  //     if (fileState) {
+  //       fileState.progress = progress;
+  //     }
+  //     return newFileStates;
+  //   });
+  // }
 
   if (isCancelled) {
     return <><div className="flex flex-col items-center m-6">CANCELLED!!!</div>
@@ -105,21 +115,33 @@ export function ServiceForm({ service }: { service?: Service | null }) {
 
   }
 
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Image URLs before submission:", imageUrls); // Debugging
 
-    const formData = new FormData();
-    formData.append("category", selectedCategory);
-    formData.append("subCategory", selectedSubCategory);
-    formData.append("description", description);
-    imagePaths.forEach((url, index) => {
-      formData.append(`imagePath[${index}]`, url);
-    });
+    try {
+      const formData = new FormData();
+      formData.append("category", selectedCategory);
+      formData.append("subCategory", selectedSubCategory);
+      formData.append("description", description);
 
-    // Call action with the FormData object
-    action(formData);
-    console.log('Submitted form data:', Object.fromEntries(formData.entries()));
+      // Append image URLs to formData
+      imageUrls.forEach((url, index) => {
+        formData.append(`imageUrls[${index}]`, url);
+      });
+
+      // Call action with the FormData object
+      await action(formData);
+
+      console.log("Submitted form data:", Object.fromEntries(formData.entries()));
+    } catch (error) {
+      console.error("Error uploading images:", error);
+    }
   };
+
+
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(e.target.value);
@@ -136,6 +158,10 @@ export function ServiceForm({ service }: { service?: Service | null }) {
   function abortFunc() {
     abortController?.abort();
   }
+
+
+
+
 
   return (
     <form onSubmit={handleSubmit}>
@@ -188,79 +214,16 @@ export function ServiceForm({ service }: { service?: Service | null }) {
         {error?.description && <div className="text-destructive"> {error.description}</div>}
       </div>
 
-      <MultiImageDropzone
-        value={fileStates}
-        dropzoneOptions={{
-          maxFiles: 6,
-        }}
-        onChange={(files) => {
-          setFileStates(files);
-        }}
-        onFilesAdded={async (addedFiles) => {
-          setFileStates([...fileStates, ...addedFiles]);
-          await Promise.all(
-            addedFiles.map(async (addedFileState, index) => {
-              try {
-                const oldFileUrl = imagePaths[index] || null;
 
-                // Ensure that addedFileState.file is of type File
-                if (!(addedFileState.file instanceof File)) {
-                  throw new Error("Expected a File object");
-                }
-
-                const abortController = new AbortController();
-
-                const res = await edgestore.publicFiles.upload({
-                  file: addedFileState.file,
-                  options: {
-                    temporary: true,
-                  },
-                  signal: abortController.signal,
-                  onProgressChange: async (progress) => {
-                    updateFileProgress(addedFileState.key, progress);
-                    if (progress === 100) {
-                      // wait 1 second to set it to complete
-                      await new Promise((resolve) => setTimeout(resolve, 1000));
-                      updateFileProgress(addedFileState.key, 'COMPLETE');
-                    }
-                  },
-                });
-                console.log(res);
-                setImagePaths((prev) => {
-                  const newImagePaths = [...prev];
-                  if (oldFileUrl) {
-                    newImagePaths[index] = res.url;
-                  } else {
-                    newImagePaths.push(res.url);
-                  }
-                  return newImagePaths;
-                });
-              } catch (err) {
-                updateFileProgress(addedFileState.key, 'ERROR');
-              }
-            }),
-          );
-        }}
-      />
-      {/* {service != null && (
-        <Image src={service.imagePath[0]} height={400} width={400} alt="Service image"/>
-      )} */}
-      <div className="image-gallery">
-        {service?.imagePath && service.imagePath.length > 0 ? (
-          service.imagePath.map((url, index) => (
-            <Image
-              key={index}
-              src={url}
-              height={400}
-              width={400}
-              alt={`Service image ${index + 1}`}
-              className="mb-4" // Add any additional styling you want
-            />
-          ))
-        ) : (
-          <p>No images available</p>
-        )}
-
+      {/* Cloudinary Image uploader */}
+      <CloudinaryUploader onUploadSuccess={handleUploadSuccess} />
+      <div className="mt-4">
+        <h3 className="text-lg font-semibold">Uploaded Images:</h3>
+        <div className="grid grid-cols-3 gap-4 mt-2 mb-[10px]">
+          {imageUrls.map((url, index) => (
+            <img key={index} src={url} alt="Uploaded" className="w-32 h-32 object-cover rounded" />
+          ))}
+        </div>
       </div>
 
       <Button type="submit">
