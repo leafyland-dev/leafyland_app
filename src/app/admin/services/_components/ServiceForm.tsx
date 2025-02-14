@@ -16,7 +16,7 @@ import { useFormState } from "react-dom";
 import { type FileState, MultiImageDropzone } from "@/components/MultiImageDropZone";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { uploadImageToFirebase } from "@/lib/utils/uploadImage";
+// import { uploadImageToFirebase } from "@/lib/utils/uploadImage";
 import CloudinaryUploader from "@/components/CloudinaryUploader";
 
 const serviceNames = [
