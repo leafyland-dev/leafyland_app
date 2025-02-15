@@ -5,7 +5,7 @@ import ServiceGrid from "@/components/ServicesGrid";
 
 export default function Service() {
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: '20px' }} className="lg:px-[40px]">
       {/* <div className=""></div> */}
         <h1 className="text-2xl lg:text-4xl font-semibold text-center mb-8 "> Our Services</h1>
         <div style={{

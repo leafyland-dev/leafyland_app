@@ -62,7 +62,7 @@ model Service{
   updatedAt DateTime     @updatedAt
 
   category      String
-  subCategory   String
+  subCategory   String?
   imagePath     String[]
   description   String
   

@@ -65,7 +65,12 @@ const serviceNames = [
     "English & French formal gardens",
     "Mediterranean & xeriscape gardens",
     "Historic garden restoration"
-  ]]
+  ]],
+  ["Landscape Development" ],
+  ["Garden Development"],
+  ["Farm House Development"],
+  ["Sports Field Development"],
+  ["Sustainability Development"]
 ]
 
 
