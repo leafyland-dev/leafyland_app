@@ -7,13 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useEdgeStore } from '@/lib/edgestore';
+import {  useState } from "react";
 import * as React from 'react';
 import { addService, updateService } from "../../_actions/service";
 import { Service, ServiceCategory } from "@prisma/client";
 import { useFormState } from "react-dom";
-import { type FileState, MultiImageDropzone } from "@/components/MultiImageDropZone";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 // import { uploadImageToFirebase } from "@/lib/utils/uploadImage";
@@ -89,6 +87,14 @@ export function ServiceForm({ service }: { service?: Service | null }) {
   const [serviceCategories, setServiceCategories] = useState<ServiceCategory[]>([]);
 
 
+  React.useEffect(() => {
+    async function fetchCategories() {
+      const categories = await getCategories();
+      setServiceCategories(categories);
+    }
+    fetchCategories();
+  }, []);
+
   // Cloudinary integration
 
   const handleUploadSuccess = (urls: string[]) => {
@@ -107,13 +113,7 @@ export function ServiceForm({ service }: { service?: Service | null }) {
 
   }
 
-  useEffect(() => {
-    async function fetchCategories() {
-      const categories = await getCategories();
-      setServiceCategories(categories);
-    }
-    fetchCategories();
-  }, []);
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
