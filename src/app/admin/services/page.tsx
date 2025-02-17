@@ -15,29 +15,35 @@ import { ActiveToggleDropdownItem, DeleteDropdownItem } from '../services/_compo
 
 
 function AdminServicePage() {
-  return (<>
-    <div className="flex justify-between items-center gap-4">
-        <PageHeader>Services</PageHeader>
-        <Button asChild>
-            <Link href="/admin/services/new">Add Service</Link>
-        </Button>
-    </div>
-    <ServiceTable/>
+    return (<>
+        <div className="flex justify-between items-center gap-4">
+            <PageHeader>Services</PageHeader>
+            <div className='flex gap-[10px]'>
+                <Button asChild>
+                    <Link href="/admin/services/new">Add Service</Link>
+                </Button>
+                <Button asChild>
+                    <Link href="/admin/services/add-service-category">Add Service Category</Link>
+                </Button>
+
+            </div>
+        </div>
+        <ServiceTable />
     </>
-  )
+    )
 }
 
-async function ServiceTable(){
+async function ServiceTable() {
     const services = await db.service.findMany({
         select: {
             id: true,
             category: true,
             isAvailable: true
         },
-        orderBy: { category: "asc"}
+        orderBy: { category: "asc" }
     })
-    if(services.length === 0) return <p>No services found</p>
-    return(
+    if (services.length === 0) return <p>No services found</p>
+    return (
         <Table>
             <TableHeader>
                 <TableRow>
@@ -59,12 +65,12 @@ async function ServiceTable(){
                             {service.isAvailable ? (
                                 <>
                                     <span className="sr-only">Available</span>
-                                    <CheckCircle2/>
+                                    <CheckCircle2 />
                                 </>
-                            ): (
+                            ) : (
                                 <>
                                     <span className="sr-only">Unavailable</span>
-                                    <XCircle className="stroke-destructive"/>
+                                    <XCircle className="stroke-destructive" />
                                 </>
                             )}
                         </TableCell>
@@ -88,12 +94,12 @@ async function ServiceTable(){
                                             Edit
                                         </Link>
                                     </DropdownMenuItem>
-                                    <ActiveToggleDropdownItem id={service.id} isAvailable = {service.isAvailable} />
-                                    <DropdownMenuSeparator/>
+                                    <ActiveToggleDropdownItem id={service.id} isAvailable={service.isAvailable} />
+                                    <DropdownMenuSeparator />
                                     {/* <DeleteDropdownItem id={service.id} disabled= {service._count.orders > 0}/> */}
                                 </DropdownMenuContent>
                             </DropdownMenu>
-                            
+
                         </TableCell>
                     </TableRow>
                 ))}

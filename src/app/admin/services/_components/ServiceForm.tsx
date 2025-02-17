@@ -7,17 +7,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useEdgeStore } from '@/lib/edgestore';
 import * as React from 'react';
 import { addService, updateService } from "../../_actions/service";
-import { Service } from "@prisma/client";
+import { Service, ServiceCategory } from "@prisma/client";
 import { useFormState } from "react-dom";
 import { type FileState, MultiImageDropzone } from "@/components/MultiImageDropZone";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 // import { uploadImageToFirebase } from "@/lib/utils/uploadImage";
 import CloudinaryUploader from "@/components/CloudinaryUploader";
+import { getCategories } from "../../_actions/category-subcategory";
 
 const serviceNames = [
   ["Landscape Design & Planning", [
@@ -78,15 +79,15 @@ export function ServiceForm({ service }: { service?: Service | null }) {
   const [selectedCategory, setSelectedCategory] = useState(service?.category || "")
   const [selectedSubCategory, setSelectedSubCategory] = useState(service?.subCategory || "")
 
-  const { edgestore } = useEdgeStore();
   const [error, action] = useFormState(service == null ? addService : updateService.bind(null, service.id), {});
-  // const [name, setName] = useState(service?.name || "");
   const [description, setDescription] = useState(service?.description || "");
 
   const [abortController, setAbortController] = useState<AbortController>();
   const [isCancelled, setIsCancelled] = useState(false);
 
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [serviceCategories, setServiceCategories] = useState<ServiceCategory[]>([]);
+
 
   // Cloudinary integration
 
@@ -99,20 +100,6 @@ export function ServiceForm({ service }: { service?: Service | null }) {
     console.log("Updated Image URLs:", imageUrls);
   }, [imageUrls]);
 
-
-  // function updateFileProgress(key: string, progress: FileState['progress']) {
-  //   setFileStates((fileStates) => {
-  //     const newFileStates = structuredClone(fileStates);
-  //     const fileState = newFileStates.find(
-  //       (fileState) => fileState.key === key,
-  //     );
-  //     if (fileState) {
-  //       fileState.progress = progress;
-  //     }
-  //     return newFileStates;
-  //   });
-  // }
-
   if (isCancelled) {
     return <><div className="flex flex-col items-center m-6">CANCELLED!!!</div>
       <Link href={"/admin/services"} className="flex felx-col items-center m-6">Click to go back</Link>
@@ -120,7 +107,13 @@ export function ServiceForm({ service }: { service?: Service | null }) {
 
   }
 
-
+  useEffect(() => {
+    async function fetchCategories() {
+      const categories = await getCategories();
+      setServiceCategories(categories);
+    }
+    fetchCategories();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -157,16 +150,8 @@ export function ServiceForm({ service }: { service?: Service | null }) {
     setSelectedSubCategory(e.target.value);
   };
 
-  const subCategories = (serviceNames.find(([category]) => category === selectedCategory)?.[1] ?? []) as string[];
-
-
-  function abortFunc() {
-    abortController?.abort();
-  }
-
-
-
-
+  // const subCategories = (serviceNames.find(([category]) => category === selectedCategory)?.[1] ?? []) as string[];
+  const subCategories = serviceCategories.find( cat => cat.category === selectedCategory)?.subCategories || []
 
   return (
     <form onSubmit={handleSubmit}>
@@ -181,8 +166,8 @@ export function ServiceForm({ service }: { service?: Service | null }) {
           className="border p-2 rounded w-full"
         >
           <option value="">Select a category</option>
-          {serviceNames.map(([category], index) => (
-            <option key={index} value={category} >{category}</option>
+          {serviceCategories.map((category, index) => (
+            <option key={index} value={category.category} >{category.category}</option>
           ))}
         </select>
 
@@ -201,8 +186,8 @@ export function ServiceForm({ service }: { service?: Service | null }) {
           disabled={!selectedCategory}
         >
           <option value="">Select a sub-service</option>
-          {subCategories.map((sub, index) => (
-            <option key={index} value={sub}>{sub}</option>
+          {subCategories.map((sub : any) => (
+            <option key={sub.id} value={sub.id}>{sub.subCategory}</option>
           ))}
         </select>
       </div>

@@ -70,6 +70,24 @@ model Service{
   isAvailable   Boolean   @default(true)
 }
 
+model ServiceCategory {
+  id        String              @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  category  String
+  subCategories ServiceSubCategory[] @relation("CategorySubcategory")
+}
+
+model ServiceSubCategory {
+  id         String          @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  subCategory String
+  categoryId  String
+  category    ServiceCategory @relation("CategorySubcategory", fields: [categoryId], references: [id])
+}
+
+
 model PlacedOrder {
   id        String       @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime     @default(now())
