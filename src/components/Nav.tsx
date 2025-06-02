@@ -34,7 +34,7 @@ export function Nav({
   serviceCategories,
 }: {
   children: ReactElement[];
-  serviceCategories: {
+  serviceCategories?: {
     name: string;
     href?: string;
     subcategories?: { name: string; href: string }[];
@@ -93,7 +93,7 @@ export function Nav({
                     onMouseEnter={() => setServicesOpen(true)}
                     onMouseLeave={() => setServicesOpen(false)}
                   >
-                    {serviceCategories.map((cat) => (
+                    {serviceCategories && serviceCategories.map((cat) => (
                       <div key={cat.name} className="mb-1 last:mb-0">
                         {cat.subcategories?.length ? (
                           <>
@@ -185,7 +185,7 @@ export function Nav({
                   </button>
                   {mobileServicesOpen && (
                     <div className="pl-4 mt-1 space-y-1">
-                      {serviceCategories.map((cat) => (
+                      {serviceCategories && serviceCategories.map((cat) => (
                         <div key={cat.name} className="mb-2">
                           <div className="font-medium text-gray-800 px-2 py-1">
                             {cat.name}
