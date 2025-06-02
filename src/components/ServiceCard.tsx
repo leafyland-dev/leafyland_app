@@ -17,10 +17,10 @@ type ServiceCardProps = {
 export function ServiceCardRound({id, category, description, imagePath} : ServiceCardProps) {
   return (
     <>
-      <Link href={`/services/${category}/full-category`} className='category-card text-center'>
+      <Link href={`/services/${category}/full-category`} className='category-card text-center pt-[10px] '>
       
-      <div className="w-[100px] h-[100px] relative mx-auto">
-              <Image src={imagePath[0]} fill alt={category}  className='w-full h-full object-cover rounded-full'
+      <div className="w-[100px] h-[100px] lg:w-[160px] lg:h-[160px] relative mx-auto">
+              <Image src={imagePath[0]} fill alt={category}  className='w-full h-full object-cover rounded-full '
               />
           
       </div> 

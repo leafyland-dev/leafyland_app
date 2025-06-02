@@ -61,7 +61,7 @@ type ProductGridProps = {
 // Component to render the product grid
 function ProductGrid({ products }: ProductGridProps) {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-[20px] md:px-[30px] lg:px-[64px]">
             {products.map((product) => (
                 <ProductCard key={product.id} {...product} />
             ))}

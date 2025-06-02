@@ -58,10 +58,6 @@ function ProductByCategory() {
 export default async function HomePage() {
 
   return <>
-  <div className="bg-[#274E2B]">
-
-    <AutoCarousel images = {HeroSectionImgs}/>
-  </div>
 
     <main className="mx-[20px] lg:mx-[80px] flex-initial">
       {/* <ServiceBar title="Our Services" /> */}
@@ -108,12 +104,12 @@ async function ProductCategory({ categoryFetcher, title }: ProductCategoryProps)
                   />
                 )}
               </div> */}
-            <div className="w-[100px] h-[100px] mx-auto rounded-full overflow-hidden border-[2px] border-green-500">
+            <div className="w-[100px] h-[100px] lg:w-[140px] lg:h-[140px] mx-auto rounded-[10px] overflow-hidden border-[5px] border-yellow-400">
               <Image
                 src={category.imagePath ? category.imagePath : serviceImg}
                 alt={category.category ?? 'Category Image'}
-                width={100}
-                height={100}
+                width={140}
+                height={140}
                 className="object-cover"
               />
             </div>
@@ -154,29 +150,29 @@ async function ProductGrid({ productFetcher, title }: ProductGridProps) {
   </>
 }
 
-async function ServiceBar({ title }: { title: string }) {
-  return (
-    <>
-      <div className="my-20 space-y-2">
-        <div className="flex gap-3">
-          <h2 className="text-2xl lg:text-3xl font-bold ">{title}</h2>
-          <Button variant={"outline"} className="space-x-2 text-xs lg:text-base" asChild>
-            <Link href={`/services`}>
-              <span>See more</span>
-              <ArrowRight className="size-3" />
-            </Link>
-          </Button>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-6 lg:grid-cols-8 gap-4">
-          {Services.map((service, index) => (
-            <div key={index} className="size-30 flex items-center space-x-4 p-2 border rounded-lg">
-              {service.icon}
-              <p className="text-xs lg:text-sm font-light  ">{service.name}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
-  )
-}
+// async function ServiceBar({ title }: { title: string }) {
+//   return (
+//     <>
+//       <div className="my-20 space-y-2">
+//         <div className="flex gap-3">
+//           <h2 className="text-2xl lg:text-3xl font-bold ">{title}</h2>
+//           <Button variant={"outline"} className="space-x-2 text-xs lg:text-base" asChild>
+//             <Link href={`/services`}>
+//               <span>See more</span>
+//               <ArrowRight className="size-3" />
+//             </Link>
+//           </Button>
+//         </div>
+//         <div className="grid grid-cols-2 md:grid-cols-6 lg:grid-cols-8 gap-4">
+//           {Services.map((service, index) => (
+//             <div key={index} className="size-30 flex items-center space-x-4 p-2 border rounded-lg">
+//               {service.icon}
+//               <p className="text-xs lg:text-sm font-light  ">{service.name}</p>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+//     </>
+//   )
+// }
 

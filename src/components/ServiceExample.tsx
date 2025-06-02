@@ -29,9 +29,9 @@ type ServiceGridProps = {
 function ServiceGrid({ services }: ServiceGridProps) {
     return (
         <>
-        <div className=' space-y-2 my-10'> 
+        <div className=' space-y-2 my-10 '> 
         <h2 className='text-2xl lg:text-3xl font-bold text-center pb-[20px]'>Our Services</h2>
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 place-items-center ">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 place-items-center ">
             {services.map((service) => (
                 <ServiceCardRound key={service.id} {...service} />
             ))}

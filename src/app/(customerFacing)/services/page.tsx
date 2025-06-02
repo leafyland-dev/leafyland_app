@@ -7,7 +7,7 @@ export default function Service() {
   return (
     <div style={{ padding: '20px' }} className="lg:px-[40px]">
       {/* <div className=""></div> */}
-        <h1 className="text-2xl lg:text-4xl font-semibold text-center mb-8 "> Our Services</h1>
+        {/* <h1 className="text-2xl lg:text-4xl font-semibold text-center mb-8 "> Our Services</h1> */}
         <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill), minmax(200px, 1fr))',
@@ -16,7 +16,7 @@ export default function Service() {
       {/* <h1 className='text-2xl lg:text-4xl font-semibold text-center mb-8 '>Work History</h1> */}
       <ServiceExample/>
 
-      <ServiceGrid />
+      {/* <ServiceGrid /> */}
 
         </div>
           <div className="container mx-auto mt-8">

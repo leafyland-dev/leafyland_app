@@ -7,7 +7,7 @@ async function ServiceCategory({ params: {category }}: {params: {category: strin
     const serviceInCategory = await db.service.findMany({
         where: {category}
     })
-    console.log('service in category', serviceInCategory)
+    // console.log('service in category', serviceInCategory)
     
     if(!serviceInCategory || serviceInCategory.length == 0){
         return <div>Category not found</div>

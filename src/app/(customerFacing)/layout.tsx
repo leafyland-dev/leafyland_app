@@ -26,18 +26,45 @@ function SignOut() {
 const Layout: FC<{ children: React.ReactNode }> = async ({ children }) => {
  
   const session = await auth()
+
+  // const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/service-categories`, {
+  //   cache: "no-cache",
+  // });
+
+  // const serviceCategories = await res.json();
+
+  const serviceCategoriesRaw = await prisma.serviceCategory.findMany({
+    include: { subCategories: true },
+  });
+
+  const serviceCategories = [
+    { name: "All Services", href: "/services" },
+    ...serviceCategoriesRaw.map((cat) => ({
+      name: cat.category,
+      subcategories: cat.subCategories.map((sub) => ({
+        name: sub.subCategory,
+        href: `/services/${cat.category
+          .toLowerCase()
+          .replace(/\s+/g, "-")}/${sub.subCategory
+          .toLowerCase()
+          .replace(/\s+/g, "-")}`,
+      })),
+    })),
+  ];
+
+
   if(session && session.user?.email){
 
     return (
       <SessionProvider>
       {/* <> */}
       
-      <Nav>
+      <Nav serviceCategories={serviceCategories}>
        
-            <NavLink key="home" href="/">Home</NavLink>
-            <NavLink key="products" href="/products">Products</NavLink>
-            <NavLink key="orders" href="/orders">My Orders</NavLink>
-            <NavLink key="services" href="/services">Services</NavLink>
+            <NavLink key="home" href="/">HOME</NavLink>
+            <NavLink key="products" href="/products">PRODUCTS</NavLink>
+            <NavLink key="orders" href="/orders">MY ORDERS</NavLink>
+            <NavLink key="services" href="/services">SERVICES</NavLink>
             <Search key="search" />
             <div key="signout"><SignOut /></div>
         
@@ -51,14 +78,18 @@ const Layout: FC<{ children: React.ReactNode }> = async ({ children }) => {
 	   else{
 	   return(
 	   <>
-	   <Nav>
-            <NavLink key="home" href="/">Home</NavLink>
-            <NavLink key="products" href="/products">Products</NavLink>
-            <NavLink key="services" href="/services">Services</NavLink>
+	   <Nav serviceCategories={serviceCategories}>
+            <NavLink key="home" href="/">HOME</NavLink>
+            <NavLink key="products" href="/products">PRODUCTS</NavLink>
+            <NavLink key="services" href="/services">SERVICES</NavLink>
             <Search key="search" />
             <Link key="signin" href={"/login"}>
                 <Button>Login/Signup</Button>
             </Link>
+            <Link key='join-us' href={"/join-us"}>
+              <Button className="bg-green-800 text-white"> JOIN US</Button>
+            </Link>
+            {/* <NavLink key="work-with-us" href="want-to-work">JOIN US</NavLink> */}
         
       </Nav>
 

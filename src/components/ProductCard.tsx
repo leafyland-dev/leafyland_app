@@ -17,8 +17,8 @@ type ProductCardProps = {
 export async function ProductCard({id, name, description, price, imagePath}: ProductCardProps) {
     
     return<>
-            <Card className="flex overflow-hidden flex-col text-[#091f0f]">
-                <div className="relative w-full h-auto aspect-video">
+            <Card className="flex  flex-col text-[#091f0f]">
+                <div className="relative  h-auto aspect-video">
                     <Image src={imagePath } fill alt={name}/>
                 </div>
                 <CardHeader>
