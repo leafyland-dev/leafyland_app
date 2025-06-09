@@ -12,6 +12,8 @@ import Image from "next/image";
 import HeroSectionImg1 from "../../../public/LandingHeroSection/Carousel1.png"
 import HeroSectionImg2 from "../../../public/LandingHeroSection/Carousel2.png"
 import HeroSectionImg3 from "../../../public/LandingHeroSection/Carousel3.png"
+import whatsapp from '../../../public/whatsapp.png'
+
 
 
 import Autoplay from 'embla-carousel-autoplay'
@@ -65,6 +67,23 @@ export default async function HomePage() {
       <ProductCategory title="Product Category" categoryFetcher={ProductByCategory} />
       <ProductGrid title="Suggested Fou You" productFetcher={MostOrdered} />
       <ProductGrid title="Newly Launched Products" productFetcher={NewestProduct} />
+      <Link href='https://wa.me/919867909355'>
+        <Image src={whatsapp} alt="icon"
+          className="
+        fixed
+        w-[80px] h-[80px]
+        shadow-lg
+        rounded-full
+        hover:shadow-xl
+        transition-shadow duration-300
+        cursor-pointer
+        z-50
+        bottom-4 right-4   // default position (mobile)
+        md:bottom-9 md:right-6 // adjust for medium and up (desktop)
+        lg:bottom-[80px] lg:left-[1800px]
+        sm:left-1/2 sm:-translate-x-1/2 sm:bottom-4 // optional: center bottom on small screens
+      "/>
+      </Link>
     </main>
 
   </>
